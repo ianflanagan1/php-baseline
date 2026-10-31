@@ -1,0 +1,7 @@
+imports:
+  - ../../../config/deptrac.yaml
+
+deptrac:
+  paths:
+    - src
+    - bin

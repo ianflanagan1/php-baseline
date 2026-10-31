@@ -1,0 +1,52 @@
+{
+    "name": "ianflanagan1/php-baseline",
+    "description": "Shared PHP architecture checks: deptrac layers and PHPStan bans that keep a functional core, imperative shell and hexagonal architecture, with the coverage listing the architecture rulebook imports",
+    "type": "phpstan-extension",
+    "license": "MIT",
+    "keywords": [
+        "phpstan",
+        "deptrac",
+        "architecture",
+        "functional core",
+        "hexagonal",
+        "static analysis"
+    ],
+    "authors": [
+        {
+            "name": "Ian Flanagan"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "deptrac/deptrac": "^4.7",
+        "phpstan/phpstan": "^2.3",
+        "spaze/phpstan-disallowed-calls": "^4.15"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.32",
+        "phpunit/phpunit": "^12.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "IanFlanagan\\PhpBaseline\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IanFlanagan\\PhpBaseline\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/php-baseline"
+    ],
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "config/phpstan.neon"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

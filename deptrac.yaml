@@ -1,0 +1,8 @@
+# The package's own layers, which follow the architecture it ships.
+imports:
+  - config/deptrac.yaml
+
+deptrac:
+  paths:
+    - src
+    - bin

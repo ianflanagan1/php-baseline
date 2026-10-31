@@ -1,0 +1,39 @@
+version: '3'
+
+vars:
+  # PHP and Composer run in this image, so neither needs installing. The tools run from vendor/.
+  PHP: >-
+    docker run --rm --user "$(id -u):$(id -g)" --env COMPOSER_HOME=/tmp/composer
+    --volume "$PWD":/app --workdir /app composer:2.11.1
+
+tasks:
+  setup:
+    desc: Install dependencies from the lockfile
+    cmds:
+      - '{{.PHP}} composer install --no-interaction'
+
+  check:
+    desc: composer.json, the tests (which include the conformance tests), PHPStan, deptrac and Pint
+    cmds:
+      - '{{.PHP}} composer validate --strict'
+      - '{{.PHP}} vendor/bin/phpunit --colors=never'
+      - '{{.PHP}} vendor/bin/phpstan analyse --no-progress'
+      - '{{.PHP}} vendor/bin/deptrac analyse --no-progress'
+      - '{{.PHP}} vendor/bin/pint --test'
+
+  format:
+    desc: Format every file
+    cmds:
+      - '{{.PHP}} vendor/bin/pint'
+
+  lint-file:
+    desc: 'Format and analyse the PHP files given after --, leaving other files alone: task lint-file -- <file>...'
+    vars:
+      PHP_FILES: '{{range .CLI_ARGS_LIST}}{{if or (hasSuffix ".php" .) (hasPrefix "bin/" .)}}{{shellQuote .}} {{end}}{{end}}'
+    cmds:
+      - '{{if .PHP_FILES}}{{.PHP}} vendor/bin/pint {{.PHP_FILES}} && {{.PHP}} vendor/bin/phpstan analyse --no-progress {{.PHP_FILES}}{{end}}'
+
+  rulebook-coverage:
+    desc: Write rulebook-coverage.json, how php-baseline enforces the architecture rulebook, for the rulebook to import
+    cmds:
+      - '{{.PHP}} php bin/php-baseline rulebook > rulebook-coverage.json'

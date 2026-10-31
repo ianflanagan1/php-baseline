@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// The composition root: `php-baseline rulebook` prints how the baseline enforces the
+// architecture rulebook, as the coverage listing the rulebook imports.
+
+use IanFlanagan\PhpBaseline\Core\RulebookListing;
+
+$autoloaders = [__DIR__.'/../vendor/autoload.php', __DIR__.'/../../../autoload.php'];
+foreach ($autoloaders as $autoloader) {
+    if (is_file($autoloader)) {
+        require $autoloader;
+        break;
+    }
+}
+
+if (array_slice($argv, 1) !== ['rulebook']) {
+    fwrite(STDERR, "usage: php-baseline rulebook\n");
+    exit(2);
+}
+echo RulebookListing::json();

@@ -1,0 +1,138 @@
+{
+    "language": "php",
+    "baseline": "ianflanagan1/php-baseline",
+    "roles": {
+        "core": "Files under src/Core/.",
+        "shell": "Every other file under src/.",
+        "adapter": "Files under src/Adapters/.",
+        "composition-root": "Scripts in bin/ and public/."
+    },
+    "checks": {
+        "deptrac-layers": {
+            "kind": "tool",
+            "tool": "deptrac",
+            "summary": "Layers by directory: src/Core/ is the core, src/Adapters/ the adapters and the rest of src/ the shell. The core depends on nothing else; the shell and adapters depend only on the core."
+        },
+        "disallowed-effects": {
+            "kind": "tool",
+            "tool": "phpstan",
+            "summary": "spaze/phpstan-disallowed-calls bans the functions, classes, constants and superglobals that perform each effect, and the global keyword, outside src/Adapters/, bin/, public/ and tests/."
+        },
+        "disallowed-configuration": {
+            "kind": "tool",
+            "tool": "phpstan",
+            "summary": "spaze/phpstan-disallowed-calls bans getenv(), putenv(), ini_get(), ini_set(), $_ENV and $_SERVER outside bin/, public/ and tests/."
+        }
+    },
+    "clauses": {
+        "every-unit-has-one-role": {
+            "coverage": "full",
+            "checks": [
+                "deptrac-layers"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_every_unit_has_one_role"
+            ]
+        },
+        "project-kind-limits-roles": {
+            "coverage": "none"
+        },
+        "core-imports-only-core": {
+            "coverage": "full",
+            "checks": [
+                "deptrac-layers"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_core_imports_only_core"
+            ]
+        },
+        "core-performs-no-effects": {
+            "coverage": "partial",
+            "checks": [
+                "disallowed-effects",
+                "disallowed-configuration"
+            ],
+            "gap": "The bans list the common functions and classes for each effect, not every one. Static properties and static variables, which hold global state, pass.",
+            "proof": [
+                "tests/ConformanceTest.php: test_core_performs_no_effects"
+            ]
+        },
+        "core-libraries-are-pure": {
+            "coverage": "none",
+            "note": "deptrac leaves out classes in no layer, so the core can use any library."
+        },
+        "shell-imports-no-adapter": {
+            "coverage": "full",
+            "checks": [
+                "deptrac-layers"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_shell_imports_no_adapter"
+            ]
+        },
+        "shell-performs-no-effects": {
+            "coverage": "partial",
+            "checks": [
+                "disallowed-effects",
+                "disallowed-configuration"
+            ],
+            "gap": "The bans list the common functions and classes for each effect, not every one. Static properties and static variables, which hold global state, pass.",
+            "proof": [
+                "tests/ConformanceTest.php: test_shell_performs_no_effects"
+            ]
+        },
+        "shell-libraries-are-pure": {
+            "coverage": "none",
+            "note": "deptrac leaves out classes in no layer, so the shell can use any library."
+        },
+        "ports-declared-by-their-user": {
+            "coverage": "full",
+            "checks": [
+                "deptrac-layers"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_shell_imports_no_adapter"
+            ],
+            "note": "The shell can't depend on an adapter, so it can't take an interface an adapter declares."
+        },
+        "ports-named-in-domain-terms": {
+            "coverage": "none"
+        },
+        "core-receives-only-pure-values": {
+            "coverage": "none"
+        },
+        "shell-branches-only-on-core-results": {
+            "coverage": "none"
+        },
+        "adapter-imports-no-shell": {
+            "coverage": "full",
+            "checks": [
+                "deptrac-layers"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_adapter_imports_no_shell"
+            ]
+        },
+        "adapter-size-is-limited": {
+            "coverage": "none"
+        },
+        "only-composition-root-reads-configuration": {
+            "coverage": "full",
+            "checks": [
+                "disallowed-configuration"
+            ],
+            "proof": [
+                "tests/ConformanceTest.php: test_only_composition_root_reads_configuration"
+            ]
+        },
+        "composition-root-size-is-limited": {
+            "coverage": "none"
+        },
+        "wired-without-a-container": {
+            "coverage": "none"
+        },
+        "no-import-cycles": {
+            "coverage": "none"
+        }
+    }
+}

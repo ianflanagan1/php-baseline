@@ -1,0 +1,30 @@
+# The roles from the architecture rulebook's vocabulary, by directory, and which roles each may
+# depend on. bin/ and public/, the composition root, are in no layer, so they may use anything.
+# Directories are from the directory deptrac runs in, which must be the project's root.
+deptrac:
+  layers:
+    - name: Core
+      collectors:
+        - type: directory
+          value: ^%projectDirectory%/src/Core/.*
+    - name: Adapter
+      collectors:
+        - type: directory
+          value: ^%projectDirectory%/src/Adapters/.*
+    - name: Shell
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: ^%projectDirectory%/src/.*
+          must_not:
+            - type: directory
+              value: ^%projectDirectory%/src/Core/.*
+            - type: directory
+              value: ^%projectDirectory%/src/Adapters/.*
+  ruleset:
+    Core: ~
+    Shell:
+      - Core
+    Adapter:
+      - Core

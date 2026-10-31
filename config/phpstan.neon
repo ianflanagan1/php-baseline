@@ -1,0 +1,210 @@
+# The effects a role may perform, from the architecture rulebook's vocabulary. Every effect is banned
+# outside adapters (src/Adapters/), the composition root (bin/ and public/) and tests; reading
+# configuration is banned outside the composition root and tests. Paths are from the directory
+# PHPStan runs in, which must be the project's root.
+#
+# Needs spaze/phpstan-disallowed-calls, which phpstan/extension-installer includes, or include its
+# extension.neon before this file.
+
+parametersSchema:
+    phpBaselineEffectPaths: listOf(string())
+    phpBaselineCompositionRootPaths: listOf(string())
+
+parameters:
+    # Where effects are allowed: adapters, the composition root and tests.
+    phpBaselineEffectPaths:
+        - src/Adapters/*
+        - bin/*
+        - public/*
+        - tests/*
+    # Where configuration may be read: the composition root and tests.
+    phpBaselineCompositionRootPaths:
+        - bin/*
+        - public/*
+        - tests/*
+    disallowedFunctionCalls:
+        -
+            function:
+                - 'time()'
+                - 'microtime()'
+                - 'hrtime()'
+                - 'date()'
+                - 'gmdate()'
+                - 'mktime()'
+                - 'gmmktime()'
+                - 'strtotime()'
+                - 'date_create()'
+                - 'date_create_immutable()'
+                - 'sleep()'
+                - 'usleep()'
+                - 'time_nanosleep()'
+                - 'time_sleep_until()'
+            message: 'reads the clock; the core takes the time as a value, and the shell asks a clock port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'rand()'
+                - 'mt_rand()'
+                - 'random_int()'
+                - 'random_bytes()'
+                - 'uniqid()'
+                - 'lcg_value()'
+                - 'srand()'
+                - 'mt_srand()'
+                - 'shuffle()'
+                - 'str_shuffle()'
+                - 'array_rand()'
+            message: 'is random; take the value from a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'fopen()'
+                - 'fread()'
+                - 'fwrite()'
+                - 'fgets()'
+                - 'fputs()'
+                - 'file()'
+                - 'file_get_contents()'
+                - 'file_put_contents()'
+                - 'file_exists()'
+                - 'readfile()'
+                - 'unlink()'
+                - 'mkdir()'
+                - 'rmdir()'
+                - 'rename()'
+                - 'copy()'
+                - 'touch()'
+                - 'chmod()'
+                - 'scandir()'
+                - 'glob()'
+                - 'opendir()'
+                - 'tempnam()'
+                - 'tmpfile()'
+                - 'is_file()'
+                - 'is_dir()'
+                - 'filesize()'
+                - 'filemtime()'
+                - 'realpath()'
+            message: 'touches the filesystem; reach files through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'curl_*()'
+                - 'fsockopen()'
+                - 'pfsockopen()'
+                - 'stream_socket_*()'
+                - 'socket_*()'
+                - 'gethostbyname()'
+                - 'dns_get_record()'
+                - 'mail()'
+                - 'header()'
+                - 'setcookie()'
+            message: 'uses the network; reach it through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'exec()'
+                - 'shell_exec()'
+                - 'system()'
+                - 'passthru()'
+                - 'proc_open()'
+                - 'popen()'
+                - 'pcntl_*()'
+                - 'posix_kill()'
+                - 'exit()'
+                - 'die()'
+            message: 'controls a process; do it through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'echo()'
+                - 'print()'
+                - 'printf()'
+                - 'vprintf()'
+                - 'print_r()'
+                - 'var_dump()'
+                - 'readline()'
+            message: 'uses the console; write through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'error_log()'
+                - 'syslog()'
+                - 'openlog()'
+            message: 'logs globally; take a logger through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            function:
+                - 'getenv()'
+                - 'putenv()'
+                - 'ini_get()'
+                - 'ini_set()'
+            message: 'reads configuration, which only the composition root does; pass the value in'
+            allowIn: %phpBaselineCompositionRootPaths%
+    disallowedMethodCalls:
+        -
+            method:
+                - 'DateTime::__construct()'
+                - 'DateTimeImmutable::__construct()'
+            message: 'may read the clock; parse with createFromFormat(), or take the time from a clock port'
+            allowIn: %phpBaselineEffectPaths%
+    disallowedNamespaces:
+        -
+            namespace:
+                - 'PDO'
+                - 'PDO\*'
+                - 'mysqli'
+                - 'mysqli_*'
+                - 'SoapClient'
+            message: 'uses the network; reach it through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            namespace:
+                - 'SplFileObject'
+                - 'SplFileInfo'
+                - 'SplTempFileObject'
+                - 'DirectoryIterator'
+                - 'FilesystemIterator'
+                - 'RecursiveDirectoryIterator'
+            message: 'touches the filesystem; reach files through a port'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            namespace:
+                - 'Random\*'
+            message: 'is random; take the value from a port'
+            allowIn: %phpBaselineEffectPaths%
+    disallowedConstants:
+        -
+            constant:
+                - 'STDIN'
+                - 'STDOUT'
+                - 'STDERR'
+            message: 'uses the console; write through a port'
+            allowIn: %phpBaselineEffectPaths%
+    disallowedSuperglobals:
+        -
+            superglobal:
+                - '$_GET'
+                - '$_POST'
+                - '$_COOKIE'
+                - '$_FILES'
+                - '$_REQUEST'
+                - '$_SESSION'
+            message: 'reads the request, which an inbound adapter translates; pass the values in'
+            allowIn: %phpBaselineEffectPaths%
+        -
+            superglobal:
+                - '$_ENV'
+                - '$_SERVER'
+            message: 'reads configuration, which only the composition root does; pass the value in'
+            allowIn: %phpBaselineCompositionRootPaths%
+        -
+            superglobal:
+                - '$GLOBALS'
+            message: 'is global state; pass state in'
+            allowIn: %phpBaselineEffectPaths%
+    disallowedKeywords:
+        -
+            keyword: 'global'
+            message: 'is global state; pass state in'
+            allowIn: %phpBaselineEffectPaths%

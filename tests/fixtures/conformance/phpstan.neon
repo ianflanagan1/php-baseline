@@ -1,0 +1,9 @@
+includes:
+    - ../../../vendor/spaze/phpstan-disallowed-calls/extension.neon
+    - ../../../config/phpstan.neon
+
+parameters:
+    level: 0
+    paths:
+        - src
+        - bin

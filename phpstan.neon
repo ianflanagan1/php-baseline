@@ -1,0 +1,15 @@
+# The package's own analysis, which follows the architecture it ships.
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/extension.neon
+    - config/phpstan.neon
+
+parameters:
+    level: 9
+    checkMissingOverrideMethodAttribute: true
+    paths:
+        - src
+        - bin
+        - tests
+    excludePaths:
+        # Breaks the rules on purpose
+        - tests/fixtures
