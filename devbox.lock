@@ -42,6 +42,83 @@
           "store_path": "/nix/store/mi9v7221z1f70lvnj2iwlis26n6690g0-go-task-3.53.1"
         }
       }
+    },
+    "php85Packages.composer@2.10.3": {
+      "last_modified": "2026-10-30T07:30:20Z",
+      "resolved": "github:NixOS/nixpkgs/885ba4d038f10c3d17d7a92e8c3cc185b99c9158#php85Packages.composer",
+      "source": "devbox-search",
+      "version": "2.10.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8zp4kw5h7qbpykvgqahl872zkvdgxmvr-composer-2.10.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8zp4kw5h7qbpykvgqahl872zkvdgxmvr-composer-2.10.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/akaqpnidwk5nf0jq9q4a2n77s67131k8-composer-2.10.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/akaqpnidwk5nf0jq9q4a2n77s67131k8-composer-2.10.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/yr1napnphhvq7wvvc8f8ry83js38vfxn-composer-2.10.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/yr1napnphhvq7wvvc8f8ry83js38vfxn-composer-2.10.3"
+        }
+      }
+    },
+    "php@8.5.12": {
+      "last_modified": "2026-10-30T07:30:20Z",
+      "plugin_version": "0.0.4",
+      "resolved": "github:NixOS/nixpkgs/885ba4d038f10c3d17d7a92e8c3cc185b99c9158#php",
+      "source": "devbox-search",
+      "version": "8.5.12",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6zrslij504rm1s420i2klhkxjss2qr0f-php-with-extensions-8.5.12",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6zrslij504rm1s420i2klhkxjss2qr0f-php-with-extensions-8.5.12"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bcyisq530wmfrkxrkjmr817si49wqmwl-php-with-extensions-8.5.12",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bcyisq530wmfrkxrkjmr817si49wqmwl-php-with-extensions-8.5.12"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/x2b9xr7jbni827d82hy9mz67w1cy5rfs-php-with-extensions-8.5.12",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/x2b9xr7jbni827d82hy9mz67w1cy5rfs-php-with-extensions-8.5.12"
+        }
+      }
     }
   }
 }

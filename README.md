@@ -76,7 +76,7 @@ When a check changes what it enforces, or the rulebook adds a clause:
 
 ## Development
 
-PHP and Composer run in Docker, in the `composer` image, so neither needs installing; Docker must be running.
+PHP and Composer come from the project's devbox, so neither needs installing.
 
 ```sh
 devbox run -- task setup
